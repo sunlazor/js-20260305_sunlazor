@@ -10,10 +10,8 @@ export function sortStrings(arr, param = 'asc') {
     let compareResult = a.localeCompare(
       b, ['ru', 'en'], {'caseFirst': 'upper', 'sensitivity': 'variant'}
     );
-    if (param === 'asc') {
-      return compareResult;
-    } else if (param === 'desc') {
-      return -compareResult;
-    }
+    const direction = param === 'asc' ? 1 : -1;
+
+    return compareResult * direction;
   });
 }
