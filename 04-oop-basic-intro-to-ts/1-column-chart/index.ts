@@ -2,27 +2,30 @@ import {createElement} from "../../shared/utils/create-element";
 
 interface Options {
   // массив чисел (данные графика)
-  data: number[] | undefined;
+  data?: number[];
   // заголовок (например, "orders")
-  label: string | undefined;
+  label?: string;
   // основное числовое значение (например, "344")
-  value: number | undefined;
+  value?: number;
   // ссылка "View all" (если передана)
-  link: string | undefined;
+  link?: string;
   // функция для форматирования значения value (например, добавление знака валюты $)
-  formatHeading: Function | undefined;
+  formatHeading?: (data: number) => string;
 }
 
 export default class ColumnChart {
   // Ссылка на корневой DOM-элемент компонента (HTMLElement).
   element;
   // Фиксированная высота графика (должна быть равна 50).
-  private chartHeight = 50;
+  chartHeight = 50;
 
-  constructor(private columnChart: Options | undefined) {
-    if (this.columnChart && this.columnChart.formatHeading === undefined) {
-      this.columnChart.formatHeading = (el: number | undefined) => { return el ? el.toString() : undefined };
-    }
+  constructor(private columnChart: Options = {
+    data: [],
+    label: '',
+    link: '',
+    value: 0,
+    formatHeading: (data: number) => data.toString(),
+  }) {
     this.element = this.makeChartTemplate();
     this.update(this.columnChart?.data);
   }
@@ -57,7 +60,6 @@ export default class ColumnChart {
   // Полностью удаляет компонент, очищает обработчики событий и ссылки на DOM-элементы (для предотвращения утечек памяти).
   destroy() {
     this.remove();
-    this.columnChart = undefined;
   }
 
   private makeChartTemplate() {
