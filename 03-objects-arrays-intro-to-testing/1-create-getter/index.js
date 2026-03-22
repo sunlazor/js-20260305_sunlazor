@@ -8,7 +8,7 @@ export function createGetter(path) {
   return function (obj) {
     let pathfinder = obj;
     for (const ph of paths) {
-      if (pathfinder == null || pathfinder[ph] instanceof Function) {
+      if (pathfinder == null || !Object.hasOwn(pathfinder, ph)) {
         return undefined;
       }
 
@@ -16,5 +16,5 @@ export function createGetter(path) {
     }
 
     return pathfinder;
-  }
+  };
 }
