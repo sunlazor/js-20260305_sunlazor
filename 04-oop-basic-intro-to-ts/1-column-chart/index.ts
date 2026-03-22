@@ -20,6 +20,9 @@ export default class ColumnChart {
   private chartHeight = 50;
 
   constructor(private columnChart: Options | undefined) {
+    if (this.columnChart && this.columnChart.formatHeading === undefined) {
+      this.columnChart.formatHeading = (el: number | undefined) => { return el ? el.toString() : undefined };
+    }
     this.element = this.makeChartTemplate();
     this.update(this.columnChart?.data);
   }
@@ -59,6 +62,17 @@ export default class ColumnChart {
     const chartLinkHtml = this.columnChart?.link
       ? `<a href="${this.columnChart?.link}" class="column-chart__link">View all</a>`
       : '';
+    let value;
+    if (this.columnChart) {
+      if (this.columnChart.value) {
+        if (this.columnChart.formatHeading) {
+          value = this.columnChart.formatHeading(this.columnChart.value);
+        } else {
+          value = this.columnChart.value;
+        }
+      }
+    }
+
     return createElement(`
     <div class="column-chart" style="--chart-height: ${this.chartHeight}">
       <div class="column-chart__title">
@@ -67,7 +81,7 @@ export default class ColumnChart {
         ${chartLinkHtml}
       </div>
       <div class="column-chart__container">
-        <div data-element="header" class="column-chart__header">${this.columnChart?.value}</div>
+        <div data-element="header" class="column-chart__header">${value}</div>
         <div data-element="body" class="column-chart__chart">
 <!--          <div style="&#45;&#45;value: 2" data-tooltip="6%"></div>-->
 <!--          <div style="&#45;&#45;value: 22" data-tooltip="44%"></div>-->
