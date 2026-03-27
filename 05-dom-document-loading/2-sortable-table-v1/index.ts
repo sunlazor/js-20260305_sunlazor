@@ -13,7 +13,7 @@ interface SortableTableHeader {
 }
 
 export default class SortableTable {
-  private element: HTMLElement;
+  public element: HTMLElement;
   constructor(private headersConfig: SortableTableHeader[] = [], private data: SortableTableData[] = []) {
     this.element = this.makeTableTemplate();
   }
