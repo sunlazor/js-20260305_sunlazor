@@ -72,7 +72,7 @@ export default class ColumnChart {
       : '';
 
     let value;
-    if (this.columnChart?.value) {
+    if (typeof this.columnChart?.value === 'number') {
       if (this.columnChart.formatHeading) {
         value = this.columnChart.formatHeading(this.columnChart.value);
       } else {
