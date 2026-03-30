@@ -23,13 +23,40 @@ export default class SortableTable {
   // Сортировка чисел — через числовое сравнение.
   // Если колонка не найдена или не сортируемая — ничего не делаем.
   public sort(field: string, order: SortOrder = 'asc') {
-    const fieldInHeader = this.headersConfig.filter((header) => header.title === field );
+    console.log('sort triggered');
+    console.log('headers: ', this.headersConfig);
+    console.log('field: ', field);
+    const fieldInHeader = this.headersConfig.filter((header) => header.id === field );
+    console.log('fieldInHeader: ', fieldInHeader);
     const isFieldNotFound = fieldInHeader.length === 0;
+    console.log('isFieldNotFound: ', isFieldNotFound);
     const isFieldNotSortable = fieldInHeader[0]?.sortable !== true;
+    console.log('isFieldNotSortable: ', isFieldNotSortable);
     if (isFieldNotFound || isFieldNotSortable) {
+      console.log(' sort is dead');
       return;
     }
 
+
+    console.log('before collCells');
+    const columnsCells
+      // = this.element?.querySelectorAll<HTMLElement>('.sortable-table__cell[data-id]') ?? [];
+      = this.element?.querySelectorAll<HTMLElement>('div[data-element="header"] .sortable-table__cell') ?? [];
+    // const isSortingExists = [...columns].some(column => column.dataset.order);
+    console.log('column cells: ', columnsCells);
+    if (columnsCells.length > 0) {
+      columnsCells.forEach((columnCell: HTMLElement) => {
+        if (columnCell.dataset.id !== field) {
+          columnCell.dataset.order = '';
+        } else {
+          columnCell.dataset.order = `${order}`;
+        }
+      })
+    }
+
+
+
+    console.log('data before sorting: ', this.data);
     this.data.sort((a, b) => {
       if (fieldInHeader[0]?.sortType === 'string') {
         let compareResult = a[field].toString().localeCompare(
@@ -52,8 +79,14 @@ export default class SortableTable {
 
       return 0;
     });
+    console.log('data after sorting: ', this.data);
 
-    this.render();
+    const bodyDiv
+      = this.element?.querySelector<HTMLElement>('div[data-element="body"]');
+    if (bodyDiv) {
+      bodyDiv.innerHTML = '';
+      this.makeTableBodyData(bodyDiv);
+    }
   }
 
   private makeTableTemplate() {
@@ -88,7 +121,12 @@ export default class SortableTable {
     let body = createElement(`
       <div data-element="body" class="sortable-table__body"></div>
     `);
+    this.makeTableBodyData(body);
 
+    return body;
+  }
+
+  private makeTableBodyData(body: HTMLElement) {
     this.data.forEach((row) => {
       let divRow = createElement(`<a class="sortable-table__row"></a>`);
       this.headersConfig.forEach((headerColumn) => {
@@ -103,8 +141,6 @@ export default class SortableTable {
 
       body.appendChild(divRow);
     });
-
-    return body;
   }
 
   public remove() {
