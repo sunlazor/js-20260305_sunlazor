@@ -41,6 +41,11 @@ export default class SortableTable {
     this.isSortLocally = tableConfig?.isSortLocally ? tableConfig.isSortLocally : true;
 
     this.element = this.makeTableTemplate();
+    if (this.defaultSort) {
+      this.sort(this.defaultSort.id, this.defaultSort.order);
+    }
+
+    this.addSortingListeners(this.element);
   }
 
   public sort(field: string, order: SortOrder = 'asc') {
@@ -53,7 +58,7 @@ export default class SortableTable {
 
   public sortOnClient(field: string, order: SortOrder = 'asc') {
     const fieldInHeader
-      = this.headersConfig.filter((header) => header.id === field );
+      = this.headersConfig.filter((header) => header.id === field);
     const isFieldNotFound = fieldInHeader.length === 0;
     const isFieldNotSortable = fieldInHeader[0]?.sortable !== true;
     if (isFieldNotFound || isFieldNotSortable) {
@@ -65,7 +70,9 @@ export default class SortableTable {
     const sortType = fieldInHeader[0]?.sortType || null;
     if (sortType) {
       let customSort = fieldInHeader[0]?.customSorting
-        || function(a, b) { return 0; };
+        || function (a, b) {
+          return 0;
+        };
       this.sortData(sortType, field, order, customSort);
     }
 
@@ -191,6 +198,22 @@ export default class SortableTable {
       });
 
       body.appendChild(divRow);
+    });
+  }
+
+  private addSortingListeners(tableDiv: HTMLElement) {
+    const headerDiv = tableDiv.querySelector('div[data-element="header"]');
+    headerDiv?.addEventListener('pointerdown', (event) => {
+      const clickedElement = event.target as HTMLElement;
+      let columnCell = clickedElement.closest<HTMLElement>('[data-sortable="true"]');
+      if (columnCell && columnCell.dataset.id) {
+        const order = columnCell.dataset.order ? columnCell.dataset.order : undefined;
+        if (order === 'asc') {
+          this.sort(columnCell.dataset.id, 'desc');
+        } else {
+          this.sort(columnCell.dataset.id, 'asc');
+        }
+      }
     });
   }
 }
