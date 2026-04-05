@@ -121,7 +121,7 @@ describe('events-practice/sortable-table-v2', () => {
 
   it('should sort "desc" correctly for "sortType" equal number', () => {
     const header = sortableTable.element?.querySelector('[data-element="header"]');
-    const [,, price] = header?.querySelectorAll<HTMLElement>('.sortable-table__cell') ?? [];
+    const [, price] = header?.querySelectorAll<HTMLElement>('.sortable-table__cell') ?? [];
 
     const pointerdown = new MouseEvent('pointerdown', {
       bubbles: true
