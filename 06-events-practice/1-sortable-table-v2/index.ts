@@ -208,10 +208,10 @@ export default class SortableTable {
       let columnCell = clickedElement.closest<HTMLElement>('[data-sortable="true"]');
       if (columnCell && columnCell.dataset.id) {
         const order = columnCell.dataset.order ? columnCell.dataset.order : undefined;
-        if (order === 'asc') {
-          this.sort(columnCell.dataset.id, 'desc');
-        } else {
+        if (order === 'desc') {
           this.sort(columnCell.dataset.id, 'asc');
+        } else {
+          this.sort(columnCell.dataset.id, 'desc');
         }
       }
     });
