@@ -36,15 +36,18 @@ export default class DoubleSlider {
   }
 
   private makeSliderTemplate() {
+    const left = (this.selected.from - this.min) / (this.max - this.min) * 100;
+    const right = 100 - (this.selected.to - this.min) / (this.max - this.min) * 100;
+
     return createElement(`
         <div class="range-slider">
-          <span>$30</span>
+          <span>${this.formatValue(this.min)}</span>
           <div class="range-slider__inner">
-            <span class="range-slider__progress" style="left: 0%; right: 0%"></span>
-            <span class="range-slider__thumb-left" style="left: 0%"></span>
-            <span class="range-slider__thumb-right" style="right: 0%"></span>
+            <span class="range-slider__progress" style="left: ${left}%; right: ${right}%"></span>
+            <span class="range-slider__thumb-left" style="left: ${left}%"></span>
+            <span class="range-slider__thumb-right" style="right: ${right}%"></span>
           </div>
-          <span>$70</span>
+          <span>${this.formatValue(this.max)}</span>
         </div>
     `);
   }
