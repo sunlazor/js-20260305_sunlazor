@@ -81,14 +81,14 @@ export default class DoubleSlider {
   private addRightThumbEvents(rightThumb: HTMLElement) {
     const sliderLeft= this.innerSlider.getBoundingClientRect().left;
     const leftLimit = this.leftThumb.offsetLeft + this.leftThumb.getBoundingClientRect().width;
-    const rigthLimit = this.innerSlider.getBoundingClientRect().width;
+    const rightLimit = this.innerSlider.getBoundingClientRect().width;
 
     this.pointermoveEvent = (event: PointerEvent) => {
       const inSliderCord = event.clientX - sliderLeft;
       if (inSliderCord < leftLimit) {
         rightThumb.style.left = leftLimit + 'px';
-      } else if (inSliderCord > rigthLimit) {
-        rightThumb.style.left = rigthLimit + 'px';
+      } else if (inSliderCord > rightLimit) {
+        rightThumb.style.left = rightLimit + 'px';
       } else {
         rightThumb.style.left = inSliderCord + 'px';
       }
