@@ -35,7 +35,7 @@ export default class DoubleSlider {
     this.min = sliderConf?.min || 0;
     this.max = sliderConf?.max || this.min + 100;
     this.formatValue = sliderConf?.formatValue ?? function(value: number) { return Math.round(value).toString() };
-    this.selected = sliderConf?.selected ?? { from: this.max * 0.25, to: this.max * 0.75};
+    this.selected = sliderConf?.selected ?? { from: this.min, to: this.max};
 
     this.element = this.makeSliderTemplate();
     this.sliderBar = <HTMLSpanElement>this.element.querySelector('.range-slider__progress');
@@ -60,13 +60,13 @@ export default class DoubleSlider {
 
     return createElement(`
         <div class="range-slider">
-          <span data-element="from">${this.formatValue(this.min)}</span>
+          <span data-element="from">${this.formatValue(this.selected.from)}</span>
           <div class="range-slider__inner">
             <span class="range-slider__progress" style="left: ${left}%; right: ${right}%"></span>
             <span class="range-slider__thumb-left" style="left: ${left}%"></span>
             <span class="range-slider__thumb-right" style="right: ${right}%"></span>
           </div>
-          <span data-element="to">${this.formatValue(this.max)}</span>
+          <span data-element="to">${this.formatValue(this.selected.to)}</span>
         </div>
     `);
   }
