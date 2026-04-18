@@ -54,6 +54,7 @@ export default class DoubleSlider {
     this.pointerdownEvent = null;
     this.pointermoveEvent = null;
     this.pointerupEvent = null;
+    this.element.remove();
   }
 
   private makeSliderTemplate() {
