@@ -194,7 +194,7 @@ export default class SortableTable {
     this.data.forEach((row) => {
       let divRow = createElement(`<a class="sortable-table__row"></a>`);
       this.headersConfig.forEach((headerColumn) => {
-        if (row[headerColumn.id]) {
+        if (row[headerColumn.id] != null) {
           let cell = createElement(`
             <div class="sortable-table__cell">${headerColumn?.template ? headerColumn?.template(row[headerColumn.id]) : row[headerColumn.id]}</div>
           `);
