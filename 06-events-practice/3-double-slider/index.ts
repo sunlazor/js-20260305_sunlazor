@@ -155,6 +155,13 @@ export default class DoubleSlider {
       if (this.pointerupEvent) {
         document.removeEventListener('pointerup', this.pointerupEvent);
       }
+      this.element.dispatchEvent(new CustomEvent('range-select', {
+        bubbles: true,
+        detail: {
+          from: parseInt(this.valueMin.textContent),
+          to: parseInt(this.valueMin.textContent),
+        }
+      }));
     };
 
     document.addEventListener('pointerup', this.pointerupEvent);
