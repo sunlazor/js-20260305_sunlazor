@@ -34,6 +34,7 @@ export default class SortableTable {
   private data: SortableTableData[];
   private defaultSort: SortableTableSort | null;
   private readonly isSortLocally: boolean;
+  private pointerDownEvent: ((event: PointerEvent) => void) | null = null;
 
   constructor(private headersConfig: SortableTableHeader[] = [], tableConfig: Options = {}) {
     this.data = tableConfig?.data || [];
@@ -86,9 +87,14 @@ export default class SortableTable {
   }
 
   public destroy() {
-    this.remove();
     this.headersConfig = [];
     this.data = [];
+    if (this.pointerDownEvent) {
+      const headerDiv = <HTMLDivElement>this.element.querySelector('div[data-element="header"]');
+      headerDiv.removeEventListener('pointerdown', this.pointerDownEvent);
+      this.pointerDownEvent = null;
+    }
+    this.remove();
   }
 
   private rewriteBodyData() {
@@ -202,8 +208,8 @@ export default class SortableTable {
   }
 
   private addSortingListeners(tableDiv: HTMLElement) {
-    const headerDiv = tableDiv.querySelector('div[data-element="header"]');
-    headerDiv?.addEventListener('pointerdown', (event) => {
+    const headerDiv = <HTMLDivElement>tableDiv.querySelector('div[data-element="header"]');
+    this.pointerDownEvent = (event: PointerEvent) => {
       const clickedElement = event.target as HTMLElement;
       let columnCell = clickedElement.closest<HTMLElement>('[data-sortable="true"]');
       if (columnCell && columnCell.dataset.id) {
@@ -214,6 +220,8 @@ export default class SortableTable {
           this.sort(columnCell.dataset.id, 'desc');
         }
       }
-    });
+    };
+
+    headerDiv.addEventListener('pointerdown', this.pointerDownEvent);
   }
 }
