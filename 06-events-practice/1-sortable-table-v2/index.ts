@@ -59,18 +59,18 @@ export default class SortableTable {
 
   public sortOnClient(field: string, order: SortOrder = 'asc') {
     const fieldInHeader
-      = this.headersConfig.filter((header) => header.id === field);
-    const isFieldNotFound = fieldInHeader.length === 0;
-    const isFieldNotSortable = fieldInHeader[0]?.sortable !== true;
+      = this.headersConfig.find((header) => header.id === field);
+    const isFieldNotFound = !fieldInHeader;
+    const isFieldNotSortable = fieldInHeader?.sortable !== true;
     if (isFieldNotFound || isFieldNotSortable) {
       return;
     }
 
     this.changeColumnsDataOrder(field, order);
 
-    const sortType = fieldInHeader[0]?.sortType || null;
+    const sortType = fieldInHeader?.sortType || null;
     if (sortType) {
-      let customSort = fieldInHeader[0]?.customSorting
+      let customSort = fieldInHeader?.customSorting
         || function (a, b) {
           return 0;
         };
