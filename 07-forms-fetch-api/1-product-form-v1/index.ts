@@ -27,4 +27,12 @@ export default class ProductForm {
 
   async save(): Promise<void> {
   }
+
+  public remove() {
+
+  }
+
+  public destroy() {
+
+  }
 }
