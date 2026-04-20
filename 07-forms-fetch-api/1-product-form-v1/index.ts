@@ -3,7 +3,18 @@ import { fetchJson } from '../../shared/utils/fetch-json';
 import {createElement} from "../../shared/utils/create-element";
 
 const IMGUR_CLIENT_ID = '28aaa2e823b03b1';
-const BACKEND_URL = 'https://course-js.javascript.ru';
+const BACKEND_URL = 'https://course-js.javascript.ru/api/rest';
+
+type Categorie = {
+  id: string,
+  title: string,
+  subcategories: Subcategorie[],
+}
+
+type Subcategorie = {
+  id: string,
+  title: string,
+}
 
 interface ProductImage {
   url: string;
@@ -18,7 +29,7 @@ interface ImgurUploadResponse {
 
 export default class ProductForm {
   productId?: string;
-  private element: HTMLElement;
+  public element: HTMLElement;
 
   constructor(productId?: string) {
     this.productId = productId;
@@ -27,6 +38,11 @@ export default class ProductForm {
   }
 
   async render(): Promise<HTMLElement | null> {
+    await this.addCategories();
+
+    return new Promise((resolve, reject) => {
+      resolve(this.element);
+    })
   }
 
   async save(): Promise<void> {
@@ -111,5 +127,24 @@ export default class ProductForm {
     </form>
   </div>
     `);
+  }
+
+  private async addCategories() {
+    let templateCategories = document.createDocumentFragment();
+    const rawCategories = await fetchJson<Categorie[]>(BACKEND_URL + '/categories?_refs=subcategory');
+    rawCategories.forEach((category) => {
+      if(category.hasOwnProperty('subcategories')) {
+        const subcats = category.subcategories;
+        subcats.forEach((subcat) => {
+          const newOption = <HTMLOptionElement>document.createElement('option');
+          newOption.id = subcat.id;
+          newOption.textContent = category.title + ' > ' + subcat.title;
+          templateCategories.appendChild(newOption);
+        })
+      }
+    });
+
+    const formControlDiv = this.element.querySelector('div select.form-control');
+    formControlDiv?.appendChild(templateCategories);
   }
 }
