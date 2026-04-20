@@ -5,13 +5,13 @@ import {createElement} from "../../shared/utils/create-element";
 const IMGUR_CLIENT_ID = '28aaa2e823b03b1';
 const BACKEND_URL = 'https://course-js.javascript.ru/api/rest';
 
-type Categorie = {
+type Category = {
   id: string,
   title: string,
-  subcategories: Subcategorie[],
+  subcategories: Subcategory[],
 }
 
-type Subcategorie = {
+type Subcategory = {
   id: string,
   title: string,
 }
@@ -131,7 +131,7 @@ export default class ProductForm {
 
   private async addCategories() {
     let templateCategories = document.createDocumentFragment();
-    const rawCategories = await fetchJson<Categorie[]>(BACKEND_URL + '/categories?_refs=subcategory');
+    const rawCategories = await fetchJson<Category[]>(BACKEND_URL + '/categories?_refs=subcategory');
     rawCategories.forEach((category) => {
       if(category.hasOwnProperty('subcategories')) {
         const subcats = category.subcategories;
