@@ -49,7 +49,7 @@ export default class ProductForm {
   }
 
   public remove() {
-
+    this.element.remove();
   }
 
   public destroy() {
@@ -92,7 +92,7 @@ export default class ProductForm {
       </div>
       <div class="form-group form-group__half_left">
         <label class="form-label">Категория</label>
-        <select class="form-control" name="subcategory">
+        <select class="form-control" name="subcategory" id="subcategory">
 <!--          <option value="progulki-i-detskaya-komnata">Детские товары и игрушки &gt; Прогулки и детская комната</option>-->
 <!--          <option value="kormlenie-i-gigiena">Детские товары и игрушки &gt; Кормление и гигиена</option>-->
 <!--          <option value="igrushki-i-razvlecheniya">Детские товары и игрушки &gt; Игрушки и развлечения</option>-->
@@ -144,7 +144,8 @@ export default class ProductForm {
       }
     });
 
-    const formControlDiv = this.element.querySelector('div select.form-control');
+    // const formControlDiv = this.element.querySelector('div select.form-control');
+    const formControlDiv = this.element.querySelector('#subcategory');
     formControlDiv?.appendChild(templateCategories);
   }
 }

@@ -39,6 +39,8 @@ describe('forms-fetch-api-part-2/product-form-v1', () => {
   it('should render categories data correctly', () => {
     const subcategory = productFormComponent.element?.querySelector('#subcategory');
 
+    // console.log(productFormComponent.element.outerHTML);
+
     if (!subcategory) {
       throw new Error('Subcategory select not found');
     }
